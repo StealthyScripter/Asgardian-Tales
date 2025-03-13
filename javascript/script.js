@@ -1,6 +1,9 @@
 // Base URL
 const BASE_URL = 'https://swapi.dev/api';
 
+//Global variable to store the character data for search functionality
+let allCharacters = [];
+
 //Function to fetch all people/charcters
 async function fetchPeople() {
     try{
@@ -8,31 +11,26 @@ async function fetchPeople() {
         const data = await response.json();
 
         const peopleData = data.results;
-
-        console.log('People data: ', peopleData);
+        allCharacters = [...peopleData]; //store for the search functionality
         
         const container = document.getElementById('container');
+        container.className = 'character-grid';
             container.innerHTML=  '';
 
-        peopleData.forEach(character => {
+        for (const character of peopleData) {
             const card = document.createElement('div');
             card.className = 'character-card';
 
+            //count the number of films, vehicles, starships and find the species
             const filmsCount = getResourceCount(character.films);
             const vehiclesCount = getResourceCount(character.vehicles);
             const starshipsCount = getResourceCount(character.starships);
             const speciesCount = getResourceCount(character.species);
             let planetName = '';
 
-            getDataFromUrl("https://swapi.dev/api/planets/1/").then(planet => {
-                if (planet) {
-                planetName = planet.name;
-                console.log("Planet name:", planetName);
-                // Access any other attributes you need
-                }
-            });
-
-
+            //Get homeworld data to display the name and/or properties later
+            const homeworldData = await getDataFromUrl(character.homeworld);
+            planetName = homeworldData ? homeworldData.name : 'unknown';
               
                card.innerHTML = `
                <div class="card-header">
@@ -77,39 +75,39 @@ async function fetchPeople() {
                     <div class="details-section">
                         <div class="info-group">
                             <div class="info-label">Homeworld</div>
-                            <div class="info-value">Planet ID: ${planetName}</div>
+                            <div class="info-value">${planetName}</div>
                         </div>
                         
                         <div class="info-group">
                             <div class="info-label">Films</div>
                             <div class="info-value">
-                                <div class="chip-container">
-                                    ${character.films.map(film => `<span class="chip">Film ${getDataFromUrl(film)}</span>`).join('')}
+                                <div class="chip-container films-container">
+                                    <span>Loading films</span>
                                 </div>
                             </div>
                         </div>
                         
                         ${vehiclesCount ? `
-                        <div class="info-group">
-                            <div class="info-label">Vehicles</div>
-                            <div class="info-value">
-                                <div class="chip-container">
-                                    ${character.vehicles.map(vehicle => `<span class="chip">Vehicle ${getDataFromUrl(vehicle)}</span>`).join('')}
+                            <div class="info-group">
+                                <div class="info-label">Vehicles</div>
+                                <div class="info-value">
+                                    <div class="chip-container vehicles-container">
+                                        <span class="loading">Loading vehicles...</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        ` : ''}
-                        
-                        ${starshipsCount ? `
-                        <div class="info-group">
-                            <div class="info-label">Starships</div>
-                            <div class="info-value">
-                                <div class="chip-container">
-                                    ${character.starships.map(starship => `<span class="chip">Starship ${getDataFromUrl(starship)}</span>`).join('')}
+                            ` : ''}
+                            
+                            ${starshipsCount ? `
+                            <div class="info-group">
+                                <div class="info-label">Starships</div>
+                                <div class="info-value">
+                                    <div class="chip-container starships-container">
+                                        <span class="loading">Loading starships...</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        ` : ''}
+                            ` : ''}
                         
                         <div class="info-group">
                             <div class="info-label">Data Info</div>
@@ -121,8 +119,54 @@ async function fetchPeople() {
                     </div>
                `;
                container.appendChild(card);
+
+               // Fetch and add the detailed data for films, vehicles, and starships
+            if (filmsCount > 0) {
+                const filmsContainer = card.querySelector('.films-container');
+                filmsContainer.innerHTML = ``;
+                
+                for (const filmUrl of character.films) {
+                    const filmData = await getDataFromUrl(filmUrl);
+                    if (filmData) {
+                        const filmChip = document.createElement('span');
+                        filmChip.className = 'chip';
+                        filmChip.textContent = filmData.title;
+                        filmsContainer.appendChild(filmChip);
+                    }
+                }
+            }
             
-        });
+            if (vehiclesCount > 0) {
+                const vehiclesContainer = card.querySelector('.vehicles-container');
+                vehiclesContainer.innerHTML = '';
+                
+                for (const vehicleUrl of character.vehicles) {
+                    const vehicleData = await getDataFromUrl(vehicleUrl);
+                    if (vehicleData) {
+                        const vehicleChip = document.createElement('span');
+                        vehicleChip.className = 'chip';
+                        vehicleChip.textContent = vehicleData.name;
+                        vehiclesContainer.appendChild(vehicleChip);
+                    }
+                }
+            }
+            
+            if (starshipsCount > 0) {
+                const starshipsContainer = card.querySelector('.starships-container');
+                starshipsContainer.innerHTML = '';
+                
+                for (const starshipUrl of character.starships) {
+                    const starshipData = await getDataFromUrl(starshipUrl);
+                    if (starshipData) {
+                        const starshipChip = document.createElement('span');
+                        starshipChip.className = 'chip';
+                        starshipChip.textContent = starshipData.name;
+                        starshipsContainer.appendChild(starshipChip);
+                    }
+                }
+            }
+            
+        }
     }
     catch (error) {
         console.error('Error fetching the people data: ', error);
@@ -145,13 +189,13 @@ async function getDataFromUrl(url) {
         }
         
         const data = await response.json();
-        return data; // Returns the full object with all its properties
+        return data; // Return the full object with all its properties
       } catch (error) {
         console.error("Error fetching data:", error);
         return null;
       }
     }
-
+    
 
  // Toggle details section
  function toggleDetails(button) {
@@ -168,35 +212,78 @@ async function getDataFromUrl(url) {
 }
 
 // Search functionality
-document.getElementById('search-input').addEventListener('input', function(e) {
-    const searchTerm = e.target.value.toLowerCase();
+function setupSearch(){
+    const searchInput = document.getElementById('search-input');
+    if (!searchInput) return;
     
-    const filteredCharacters = characters.filter(char => 
-        char.name.toLowerCase().includes(searchTerm) ||
-        char.gender.toLowerCase().includes(searchTerm) ||
-        char.eye_color.toLowerCase().includes(searchTerm) ||
-        char.hair_color.toLowerCase().includes(searchTerm) ||
-        char.skin_color.toLowerCase().includes(searchTerm)
-    );
-    
-    const grid = document.getElementById('character-grid');
-    grid.innerHTML = '';
-    
-    if (filteredCharacters.length === 0) {
-        grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 30px;">No characters found matching your search.</div>';
-        return;
-    }
-    
-    filteredCharacters.forEach(character => {
-        // Create and append character cards 
-        const card = document.createElement('div');
-        card.className = 'character-card';
-        // Populate card with character info (same as above)
-        card.innerHTML = `<h1>${character.name}Populate with filtered information</h1>`;
-        grid.appendChild(card);
+    searchInput.addEventListener('input', function(e) {
+        const searchTerm = e.target.value.toLowerCase();
+        
+        if (!allCharacters || allCharacters.length === 0) {
+            console.error('No character data available for search');
+            return;
+        }
+        
+        const filteredCharacters = allCharacters.filter(char => 
+            char.name.toLowerCase().includes(searchTerm) ||
+            char.gender.toLowerCase().includes(searchTerm) ||
+            char.eye_color.toLowerCase().includes(searchTerm) ||
+            char.hair_color.toLowerCase().includes(searchTerm) ||
+            char.skin_color.toLowerCase().includes(searchTerm)
+        );
+        
+        const container = document.getElementById('container');
+        container.innerHTML = '';
+        container.className = 'character-grid';
+        
+        if (filteredCharacters.length === 0) {
+            container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 30px;">No characters found matching your search.</div>';
+            return;
+        }
+        
+        // This is a simplified version. I will later use the samelogic as fetchPeople
+        for (const character of filteredCharacters) {
+            const card = document.createElement('div');
+            card.className = 'character-card';
+            card.innerHTML = `
+                <div class="card-header">
+                    <h2 class="card-title">${character.name}</h2>
+                </div>
+                <div class="card-body">
+                    <div class="info-group">
+                        <div class="info-label">Gender</div>
+                        <div class="info-value">${character.gender}</div>
+                    </div>
+                    <div class="info-group">
+                        <div class="info-label">Birth Year</div>
+                        <div class="info-value">${character.birth_year}</div>
+                    </div>
+                </div>
+                <button class="details-toggle" onclick="toggleDetails(this)">Show More Details</button>
+                <div class="details-section">
+                    <div class="info-group">
+                        <div class="info-label">Height</div>
+                        <div class="info-value">${character.height}cm</div>
+                    </div>
+                    <div class="info-group">
+                        <div class="info-label">Mass</div>
+                        <div class="info-value">${character.mass}kg</div>
+                    </div>
+                    <div class="info-group">
+                        <div class="info-label">Hair Color</div>
+                        <div class="info-value">${character.hair_color}</div>
+                    </div>
+                    <div class="info-group">
+                        <div class="info-label">Eye Color</div>
+                        <div class="info-value">${character.eye_color}</div>
+                    </div>
+                </div>
+            `;
+            container.appendChild(card);
+        }
     });
-});
 
+};
 
 function initializeApp(){
     //Fetch the people data
