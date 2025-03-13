@@ -22,6 +22,17 @@ async function fetchPeople() {
             const vehiclesCount = getResourceCount(character.vehicles);
             const starshipsCount = getResourceCount(character.starships);
             const speciesCount = getResourceCount(character.species);
+            let planetName = '';
+
+            getDataFromUrl("https://swapi.dev/api/planets/1/").then(planet => {
+                if (planet) {
+                planetName = planet.name;
+                console.log("Planet name:", planetName);
+                // Access any other attributes you need
+                }
+            });
+
+
               
                card.innerHTML = `
                <div class="card-header">
@@ -66,14 +77,14 @@ async function fetchPeople() {
                     <div class="details-section">
                         <div class="info-group">
                             <div class="info-label">Homeworld</div>
-                            <div class="info-value">Planet ID: ${getIdFromUrl(character.homeworld)}</div>
+                            <div class="info-value">Planet ID: ${planetName}</div>
                         </div>
                         
                         <div class="info-group">
                             <div class="info-label">Films</div>
                             <div class="info-value">
                                 <div class="chip-container">
-                                    ${character.films.map(film => `<span class="chip">Film ${getIdFromUrl(film)}</span>`).join('')}
+                                    ${character.films.map(film => `<span class="chip">Film ${getDataFromUrl(film)}</span>`).join('')}
                                 </div>
                             </div>
                         </div>
@@ -83,7 +94,7 @@ async function fetchPeople() {
                             <div class="info-label">Vehicles</div>
                             <div class="info-value">
                                 <div class="chip-container">
-                                    ${character.vehicles.map(vehicle => `<span class="chip">Vehicle ${getIdFromUrl(vehicle)}</span>`).join('')}
+                                    ${character.vehicles.map(vehicle => `<span class="chip">Vehicle ${getDataFromUrl(vehicle)}</span>`).join('')}
                                 </div>
                             </div>
                         </div>
@@ -94,7 +105,7 @@ async function fetchPeople() {
                             <div class="info-label">Starships</div>
                             <div class="info-value">
                                 <div class="chip-container">
-                                    ${character.starships.map(starship => `<span class="chip">Starship ${getIdFromUrl(starship)}</span>`).join('')}
+                                    ${character.starships.map(starship => `<span class="chip">Starship ${getDataFromUrl(starship)}</span>`).join('')}
                                 </div>
                             </div>
                         </div>
@@ -125,10 +136,22 @@ function getResourceCount(arr) {
 }
 
 // Extract ID from URL
-function getIdFromUrl(url) {
-    const parts = url.split('/');
-    return parts[parts.length - 2];
-}
+async function getDataFromUrl(url) {
+    try {
+        const response = await fetch(url);
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        return data; // Returns the full object with all its properties
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        return null;
+      }
+    }
+
 
  // Toggle details section
  function toggleDetails(button) {
