@@ -1,6 +1,7 @@
 // Base URL
 const BASE_URL = 'https://swapi.dev/api';
 
+
 //Global variable to store the character data for search functionality
 let allCharacters = [];
 
@@ -174,6 +175,228 @@ async function fetchPeople() {
     }  
 }
 
+async function initializeFilmPage() {
+    try {
+        const response = await fetch(`${BASE_URL}/films/`);
+        const data = await response.json();
+        
+        const filmData = data.results;
+        console.log('Film data: ', filmData);
+
+        const container = document.getElementById('container');
+        container.className = 'character-grid';
+        container.innerHTML = '';
+
+        for (const film of filmData) {
+            const card = document.createElement('div');
+            card.className = 'film-card';
+            
+            // Count the number of characters, planets, vehicles, starships, and species
+            const charactersCount = getResourceCount(film.characters);
+            const planetsCount = getResourceCount(film.planets);
+            const vehiclesCount = getResourceCount(film.vehicles);
+            const starshipsCount = getResourceCount(film.starships);
+            const speciesCount = getResourceCount(film.species);
+            
+            card.innerHTML = `
+                <div class="card-header">
+                    <h2 class="card-title">${film.title}</h2>
+                    <div class="film-episode">Episode ${film.episode_id}</div>
+                </div>
+                <div class="card-body">
+                    <div class="info-group">
+                        <div class="info-label">Release Date</div>
+                        <div class="info-value">${film.release_date}</div>
+                    </div>
+                    
+                    <div class="info-group">
+                        <div class="info-label">Director</div>
+                        <div class="info-value">${film.director}</div>
+                    </div>
+                    
+                    <div class="info-group">
+                        <div class="info-label">Producer</div>
+                        <div class="info-value">${film.producer}</div>
+                    </div>
+                    
+                    <div class="info-group">
+                        <div class="info-label">Features</div>
+                        <div class="info-value">
+                            <div class="chip-container">
+                                <span class="chip">${charactersCount} Characters</span>
+                                <span class="chip">${planetsCount} Planets</span>
+                                <span class="chip">${vehiclesCount} Vehicles</span>
+                                <span class="chip">${starshipsCount} Starships</span>
+                                <span class="chip">${speciesCount} Species</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="details-toggle" onclick="toggleDetails(this)">Show More Details</button>
+                <div class="details-section">
+                    <div class="info-group">
+                        <div class="info-label">Opening Crawl</div>
+                        <div class="info-value opening-crawl">${film.opening_crawl.replace(/\r\n/g, '<br>')}</div>
+                    </div>
+                    
+                    <div class="info-group">
+                        <div class="info-label">Characters</div>
+                        <div class="info-value">
+                            <div class="chip-container characters-container">
+                                <span class="loading">Loading characters...</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-group">
+                        <div class="info-label">Planets</div>
+                        <div class="info-value">
+                            <div class="chip-container planets-container">
+                                <span class="loading">Loading planets...</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    ${vehiclesCount ? `
+                    <div class="info-group">
+                        <div class="info-label">Vehicles</div>
+                        <div class="info-value">
+                            <div class="chip-container vehicles-container">
+                                <span class="loading">Loading vehicles...</span>
+                            </div>
+                        </div>
+                    </div>
+                    ` : ''}
+                    
+                    ${starshipsCount ? `
+                    <div class="info-group">
+                        <div class="info-label">Starships</div>
+                        <div class="info-value">
+                            <div class="chip-container starships-container">
+                                <span class="loading">Loading starships...</span>
+                            </div>
+                        </div>
+                    </div>
+                    ` : ''}
+                    
+                    ${speciesCount ? `
+                    <div class="info-group">
+                        <div class="info-label">Species</div>
+                        <div class="info-value">
+                            <div class="chip-container species-container">
+                                <span class="loading">Loading species...</span>
+                            </div>
+                        </div>
+                    </div>
+                    ` : ''}
+                    
+                    <div class="info-group">
+                        <div class="info-label">Data Info</div>
+                        <div class="info-value">
+                            Created: ${new Date(film.created).toLocaleDateString()}<br>
+                            Last updated: ${new Date(film.edited).toLocaleDateString()}
+                        </div>
+                    </div>
+                </div>
+            `;
+            container.appendChild(card);
+            
+            // Fetch and add the detailed data for characters
+            if (charactersCount > 0) {
+                const charactersContainer = card.querySelector('.characters-container');
+                charactersContainer.innerHTML = '';
+                
+                for (const characterUrl of film.characters) {
+                    const characterData = await getDataFromUrl(characterUrl);
+                    if (characterData) {
+                        const characterChip = document.createElement('span');
+                        characterChip.className = 'chip';
+                        characterChip.textContent = characterData.name;
+                        charactersContainer.appendChild(characterChip);
+                    }
+                }
+            }
+            
+            // Fetch and add the detailed data for planets
+            if (planetsCount > 0) {
+                const planetsContainer = card.querySelector('.planets-container');
+                planetsContainer.innerHTML = '';
+                
+                for (const planetUrl of film.planets) {
+                    const planetData = await getDataFromUrl(planetUrl);
+                    if (planetData) {
+                        const planetChip = document.createElement('span');
+                        planetChip.className = 'chip';
+                        planetChip.textContent = planetData.name;
+                        planetsContainer.appendChild(planetChip);
+                    }
+                }
+            }
+            
+            // Fetch and add the detailed data for vehicles
+            if (vehiclesCount > 0) {
+                const vehiclesContainer = card.querySelector('.vehicles-container');
+                vehiclesContainer.innerHTML = '';
+                
+                for (const vehicleUrl of film.vehicles) {
+                    const vehicleData = await getDataFromUrl(vehicleUrl);
+                    if (vehicleData) {
+                        const vehicleChip = document.createElement('span');
+                        vehicleChip.className = 'chip';
+                        vehicleChip.textContent = vehicleData.name;
+                        vehiclesContainer.appendChild(vehicleChip);
+                    }
+                }
+            }
+            
+            // Fetch and add the detailed data for starships
+            if (starshipsCount > 0) {
+                const starshipsContainer = card.querySelector('.starships-container');
+                starshipsContainer.innerHTML = '';
+                
+                for (const starshipUrl of film.starships) {
+                    const starshipData = await getDataFromUrl(starshipUrl);
+                    if (starshipData) {
+                        const starshipChip = document.createElement('span');
+                        starshipChip.className = 'chip';
+                        starshipChip.textContent = starshipData.name;
+                        starshipsContainer.appendChild(starshipChip);
+                    }
+                }
+            }
+            
+            // Fetch and add the detailed data for species
+            if (speciesCount > 0) {
+                const speciesContainer = card.querySelector('.species-container');
+                speciesContainer.innerHTML = '';
+                
+                for (const speciesUrl of film.species) {
+                    const speciesData = await getDataFromUrl(speciesUrl);
+                    if (speciesData) {
+                        const speciesChip = document.createElement('span');
+                        speciesChip.className = 'chip';
+                        speciesChip.textContent = speciesData.name;
+                        speciesContainer.appendChild(speciesChip);
+                    }
+                }
+            }
+        }
+    } catch (error) {
+        console.error('Error fetching film information:', error);
+        const container = document.getElementById('container');
+        if (container) {
+            container.innerHTML = `
+                <div style="text-align: center; padding: 40px;">
+                    <h2>Error Loading Films</h2>
+                    <p>Unable to load film data. Please try again later.</p>
+                    <p>Error: ${error.message}</p>
+                </div>
+            `;
+        }
+        return;
+    }
+}
+
 // Get count of resource arrays (films, vehicles, etc.)
 function getResourceCount(arr) {
     return arr && arr.length ? arr.length : 0;
@@ -285,10 +508,31 @@ function setupSearch(){
 
 };
 
-function initializeApp(){
-    //Fetch the people data
-    fetchPeople();
+function initializeApp() {
+    const path = window.location.pathname;
 
+    // Check if the path is empty (root of the site)
+    if (path === '/' || path === '' || path === '/index.html') {
+        fetchPeople();
+        
+    } else if(path === '/film-page' || path === '/film-page.html') {
+        initializeFilmPage();
+
+    } else {
+        // Handle unknown paths or non-existent pages
+        console.error('Page not found: ' + path);
+        const container = document.getElementById('category-container');
+        if (container) {
+            container.innerHTML = `
+                <div style="text-align: center; padding: 40px;">
+                    <h2>404 Error</h2>
+                    <p>The page you are looking for does not exist.</p>
+                    <p>Please check the URL and try again.</p>
+                </div>
+            `;
+        }
+    }
 }
+
 // Run when the page is loaded
 document.addEventListener('DOMContentLoaded', initializeApp);

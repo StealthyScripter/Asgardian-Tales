@@ -178,3 +178,16 @@ h1 {
         grid-template-columns: 1fr;
     }
 }
+
+.film-card {
+    background-color: var(--card-bg);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    border: 1px solid #333;
+}
+
+.film-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+}
