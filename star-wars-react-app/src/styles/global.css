@@ -1,0 +1,37 @@
+/* Reset and base styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --primary-color: #FFE81F;
+  --background-dark: #121212;
+  --card-background: #1F1F1F;
+  --text-light: #FFFFFF;
+  --text-muted: #AAAAAA;
+  --accent-color: #FFE81F;
+  --border-color: #333333;
+  --header-background: #000000;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: var(--background-dark);
+  color: var(--text-light);
+  line-height: 1.6;
+  margin: 0;
+  min-height: 100vh;
+  display: block;
+}
+
+a {
+  font-weight: 500;
+  color: var(--primary-color);
+  text-decoration: inherit;
+}
+
+a:hover {
+  color: var(--text-light);
+}
