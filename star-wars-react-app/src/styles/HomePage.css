@@ -1,4 +1,3 @@
-/* HomePage.css */
 
 /* Star Wars intro crawl */
 .intro-crawl-container {
@@ -15,7 +14,7 @@
     position: relative;
     top: 99999px;
     transform-origin: 50% 100%;
-    animation: crawl 60s linear;
+    /* animation: crawl 2s linear; */
     color: #FFE81F;
     font-family: 'Arial', sans-serif;
     font-size: 2rem;
@@ -30,8 +29,8 @@
       transform: rotateX(25deg) translateZ(0);
     }
     100% {
-      top: -6000px;
-      transform: rotateX(25deg) translateZ(-2500px);
+      top: -600px; /* Reduced distance for faster animation */
+      transform: rotateX(25deg) translateZ(-250px);
     }
   }
   
