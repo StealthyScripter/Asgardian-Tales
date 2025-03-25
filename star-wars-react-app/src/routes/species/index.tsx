@@ -2,30 +2,22 @@ import React from 'react';
 import useStarWarsData from '../../hooks/useStarWarsData';
 import { fetchSpecies } from '../../services/api';
 import { Species } from '../../interfaces';
-import LoadingSpinner from '../../components/common/LoadingSpinner';
-import ErrorMessage from '../../components/common/ErrorMessage';
 import SectionTitle from '../../components/common/SectionTitle';
-
-
+import SpeciesList from '../../components/species/SpeciesList';
 
 const SpeciesPage: React.FC = () => {
   const {
-    data: species,
+    data: speciesList,
     isLoading,
     error,
     searchTerm,
-    handleSearch
+    handleSearch,
+    loadNextPage,
+    loadPrevPage,
+    hasNextPage,
+    hasPrevPage
   } = useStarWarsData<Species>(fetchSpecies);
 
-  if (isLoading && species.length === 0) {
-    return <LoadingSpinner />;
-  }
-
-  if (error) {
-    return <ErrorMessage message={error} />;
-  }
-
-  
   return (
     <div className="page-container">
       <SectionTitle
@@ -34,8 +26,18 @@ const SpeciesPage: React.FC = () => {
         searchTerm={searchTerm}
         placeholder='Search Species...'
       />
-      {/* Planet list component will go here */}
-      <p>Sorry!! Species's page will be implemented soon!</p>
+      
+      <SpeciesList
+        speciesList={speciesList}
+        isLoading={isLoading}
+        error={error}
+        onSearch={handleSearch}
+        searchTerm={searchTerm}
+        hasNextPage={hasNextPage}
+        hasPrevPage={hasPrevPage}
+        onNextPage={loadNextPage}
+        onPrevPage={loadPrevPage}
+      />
     </div>
   );
 };

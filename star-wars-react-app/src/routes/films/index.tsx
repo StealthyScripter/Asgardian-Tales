@@ -2,9 +2,8 @@ import React from 'react';
 import useStarWarsData from '../../hooks/useStarWarsData';
 import { fetchFilms } from '../../services/api';
 import { Film } from '../../interfaces';
-import LoadingSpinner from '../../components/common/LoadingSpinner';
-import ErrorMessage from '../../components/common/ErrorMessage';
 import SectionTitle from '../../components/common/SectionTitle';
+import FilmList from '../../components/films/FilmList';
 
 const FilmsPage: React.FC = () => {
   const {
@@ -15,14 +14,6 @@ const FilmsPage: React.FC = () => {
     handleSearch
   } = useStarWarsData<Film>(fetchFilms);
 
-  if (isLoading && films.length === 0) {
-    return <LoadingSpinner />;
-  }
-
-  if (error) {
-    return <ErrorMessage message={error} />;
-  }
-
   return (
     <div className="page-container">
       <SectionTitle
@@ -32,16 +23,13 @@ const FilmsPage: React.FC = () => {
         placeholder='Search Films...'
       />
       
-      <div className="films-placeholder">
-        <p>Film components will be implemented soon!</p>
-        <ul>
-          {films.map(film => (
-            <li key={film.url} style={{ color: 'var(--primary-color)', marginBottom: '10px' }}>
-              {film.title} (Episode {film.episode_id})
-            </li>
-          ))}
-        </ul>
-      </div>
+      <FilmList
+        films={films}
+        isLoading={isLoading}
+        error={error}
+        onSearch={handleSearch}
+        searchTerm={searchTerm}
+      />
     </div>
   );
 };

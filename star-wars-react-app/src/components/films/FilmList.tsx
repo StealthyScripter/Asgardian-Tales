@@ -8,19 +8,28 @@ interface FilmListProps {
   films: Film[];
   isLoading: boolean;
   error: string | null;
+  onSearch: (term: string) => void;
+  searchTerm: string;
 }
 
-const FilmList: React.FC<FilmListProps> = ({ films, isLoading, error }) => {
-  if (isLoading) return <LoadingSpinner />;
+const FilmList: React.FC<FilmListProps> = ({ 
+  films, 
+  isLoading, 
+  error 
+}) => {
+  if (isLoading && films.length === 0) return <LoadingSpinner />;
   if (error) return <ErrorMessage message={error} />;
   
   return (
-    <div className="film-list">
-      
+    <div className="film-list-container">
       {films.length === 0 ? (
-        <p>No films found.</p>
+        <div className="no-results">
+          <p>No films found. Try a different search term.</p>
+        </div>
       ) : (
-        films.map((film) => <FilmCard key={film.url} film={film} />)
+        <div className="film-grid">
+          {films.map((film) => <FilmCard key={film.url} film={film} />)}
+        </div>
       )}
     </div>
   );

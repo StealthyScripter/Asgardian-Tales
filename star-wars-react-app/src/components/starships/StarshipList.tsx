@@ -8,18 +8,55 @@ interface StarshipListProps {
   starships: Starship[];
   isLoading: boolean;
   error: string | null;
+  onSearch: (term: string) => void;
+  searchTerm: string;
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
+  onNextPage: () => void;
+  onPrevPage: () => void;
 }
 
-const StarshipList: React.FC<StarshipListProps> = ({ starships, isLoading, error }) => {
-  if (isLoading) return <LoadingSpinner />;
+const StarshipList: React.FC<StarshipListProps> = ({ 
+  starships, 
+  isLoading, 
+  error,
+  hasNextPage,
+  hasPrevPage,
+  onNextPage,
+  onPrevPage
+}) => {
+  if (isLoading && starships.length === 0) return <LoadingSpinner />;
   if (error) return <ErrorMessage message={error} />;
   
   return (
-    <div className="starship-list">
+    <div className="starship-list-container">
       {starships.length === 0 ? (
-        <p>No starships found.</p>
+        <div className="no-results">
+          <p>No starships found. Try a different search term.</p>
+        </div>
       ) : (
-        starships.map((starship) => <StarshipCard key={starship.url} starship={starship} />)
+        <>
+          <div className="starship-grid">
+            {starships.map((starship) => <StarshipCard key={starship.url} starship={starship} />)}
+          </div>
+          
+          <div className="pagination">
+            <button 
+              onClick={onPrevPage} 
+              disabled={!hasPrevPage || isLoading}
+              className="pagination-button"
+            >
+              Previous
+            </button>
+            <button 
+              onClick={onNextPage} 
+              disabled={!hasNextPage || isLoading}
+              className="pagination-button"
+            >
+              Next
+            </button>
+          </div>
+        </>
       )}
     </div>
   );

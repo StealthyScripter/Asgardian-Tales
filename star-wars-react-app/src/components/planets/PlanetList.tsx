@@ -10,19 +10,54 @@ interface PlanetListProps {
   error: string | null;
   onSearch: (term: string) => void;
   searchTerm: string;
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
+  onNextPage: () => void;
+  onPrevPage: () => void;
 
 }
 
-const PlanetList: React.FC<PlanetListProps> = ({ planets, isLoading, error }) => {
-  if (isLoading) return <LoadingSpinner />;
+const PlanetList: React.FC<PlanetListProps> = ({ 
+  planets,
+  isLoading, 
+  error, 
+  hasNextPage,
+  hasPrevPage,
+  onNextPage,
+  onPrevPage
+ }) => {
+  if (isLoading && planets.length === 0) return <LoadingSpinner />;
   if (error) return <ErrorMessage message={error} />;
   
   return (
-    <div className="planet-list">
+    <div className="planet-list-container">
       {planets.length === 0 ? (
-        <p>No planets found.</p>
+        <div className="no-results">
+          <p>No planets found. Try a different search term.</p>
+        </div>
       ) : (
-        planets.map((planet) => <PlanetCard key={planet.url} planet={planet} />)
+        <>
+          <div className="planet-grid">
+            {planets.map((planet) => <PlanetCard key={planet.url} planet={planet} />)}
+          </div>
+          
+          <div className="pagination">
+            <button 
+              onClick={onPrevPage} 
+              disabled={!hasPrevPage || isLoading}
+              className="pagination-button"
+            >
+              Previous
+            </button>
+            <button 
+              onClick={onNextPage} 
+              disabled={!hasNextPage || isLoading}
+              className="pagination-button"
+            >
+              Next
+            </button>
+          </div>
+        </>
       )}
     </div>
   );

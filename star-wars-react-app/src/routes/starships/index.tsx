@@ -2,42 +2,44 @@ import React from 'react';
 import useStarWarsData from '../../hooks/useStarWarsData';
 import { fetchStarships } from '../../services/api';
 import { Starship } from '../../interfaces';
-import LoadingSpinner from '../../components/common/LoadingSpinner';
-import ErrorMessage from '../../components/common/ErrorMessage';
 import SectionTitle from '../../components/common/SectionTitle';
+import StarshipList from '../../components/starships/StarshipList';
 
-
-
-const StarshipPage: React.FC = () => {
+const StarshipsPage: React.FC = () => {
   const {
     data: starships,
     isLoading,
     error,
     searchTerm,
-    handleSearch
+    handleSearch,
+    loadNextPage,
+    loadPrevPage,
+    hasNextPage,
+    hasPrevPage
   } = useStarWarsData<Starship>(fetchStarships);
 
-  if (isLoading && starships.length === 0) {
-    return <LoadingSpinner />;
-  }
-
-  if (error) {
-    return <ErrorMessage message={error} />;
-  }
-
-  
   return (
     <div className="page-container">
       <SectionTitle
-        title="Starship"
+        title="Starships"
         onSearch={handleSearch}
         searchTerm={searchTerm}
         placeholder='Search Starships...'
       />
-      {/* Planet list component will go here */}
-      <p>Sorry!! Starship's page will be implemented soon!</p>
+      
+      <StarshipList
+        starships={starships}
+        isLoading={isLoading}
+        error={error}
+        onSearch={handleSearch}
+        searchTerm={searchTerm}
+        hasNextPage={hasNextPage}
+        hasPrevPage={hasPrevPage}
+        onNextPage={loadNextPage}
+        onPrevPage={loadPrevPage}
+      />
     </div>
   );
 };
 
-export default StarshipPage;
+export default StarshipsPage;

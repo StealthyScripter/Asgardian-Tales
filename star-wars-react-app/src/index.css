@@ -204,3 +204,119 @@
   margin: 2rem auto;
   max-width: 600px;
 }
+
+/* Grid layouts for all entity types */
+.planet-grid,
+.species-grid,
+.starship-grid,
+.vehicle-grid,
+.film-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  width: 100%;
+}
+
+/* Card styles for all entity types */
+.planet-card,
+.species-card,
+.starship-card,
+.vehicle-card,
+.film-card {
+  background-color: var(--card-background);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.planet-card h2,
+.species-card h2,
+.starship-card h2,
+.vehicle-card h2,
+.film-card h2 {
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+/* Opening crawl for films */
+.opening-crawl {
+  font-style: italic;
+  margin-top: 0.5rem;
+  color: var(--text-light);
+  opacity: 0.9;
+}
+
+.full-opening-crawl {
+  font-style: italic;
+  margin-top: 0.5rem;
+  color: var(--text-light);
+  opacity: 0.9;
+  white-space: pre-line;
+  line-height: 1.8;
+}
+
+/* Container styles for list components */
+.planet-list-container,
+.species-list-container,
+.starship-list-container,
+.vehicle-list-container,
+.film-list-container {
+  width: 100%;
+}
+
+/* Responsive grid adjustments */
+@media (max-width: 1024px) {
+  .character-grid,
+  .planet-grid,
+  .species-grid,
+  .starship-grid,
+  .vehicle-grid,
+  .film-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .nav-links li {
+    margin-left: 0.8rem;
+  }
+  
+  .nav-links a {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .character-grid,
+  .planet-grid,
+  .species-grid,
+  .starship-grid,
+  .vehicle-grid,
+  .film-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .header .container {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .nav-links {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  .page-title-container {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .search-container {
+    margin: 1rem auto 0;
+    width: 100%;
+  }
+}
