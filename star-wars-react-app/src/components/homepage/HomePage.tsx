@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
+import Credit from '../common/Credit';
 import '../../styles/HomePage.css';
 
 interface ButtonProps {
@@ -76,9 +77,13 @@ const StarWarsHomepage: React.FC = () => {
             <Button href="#">WATCH TRAILERS</Button>
           </div>
         </div>
-        <div className="image-credit">
-          Photo by <a href="https://unsplash.com/@sushioutlaw?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash" target="_blank" rel="noopener noreferrer">Brian McGowan</a> on <a href="https://unsplash.com/photos/white-robot-toy-on-black-background-ggg_B1MeqQk?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash" target="_blank" rel="noopener noreferrer">Unsplash</a>
-        </div>
+        <Credit 
+          text="Photo by "
+          linkText=" Unsplash"
+          linkUrl="https://unsplash.com/photos/white-robot-toy-on-black-background-ggg_B1MeqQk?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash"
+          author="Brian McGowan"
+          authorUrl="https://unsplash.com/@sushioutlaw?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash"
+        />
       </div>
 
       <div className="categories-section">
