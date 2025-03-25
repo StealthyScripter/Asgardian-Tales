@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import RootLayout from './routes/root';
+import HomePage from './components/homepage/HomePage';
 import CharactersPage from './routes/characters';
 import VehiclesPage from './routes/vehicles';
 import StarshipsPage from './routes/starships';
@@ -9,13 +10,14 @@ import FilmsPage from './routes/films';
 import './styles/global.css';
 import './App.css';
 import './index.css';
+import './styles/HomePage.css';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<RootLayout />}>
-          <Route index element={<CharactersPage />} />
+          <Route index element={<HomePage />} />
           <Route path="people" element={<CharactersPage />} />
           <Route path="vehicles" element={<VehiclesPage />} />
           <Route path="starships" element={<StarshipsPage />} />

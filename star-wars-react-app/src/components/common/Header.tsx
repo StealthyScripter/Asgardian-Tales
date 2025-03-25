@@ -20,6 +20,11 @@ import { Link, useLocation } from 'react-router-dom';
         <nav>
           <ul className="nav-links">
             <li>
+              <Link to="/" className={isActive('/') ? 'active' : ''}>
+                Home
+              </Link>
+            </li>
+            <li>
               <Link to="/people" className={isActive('/people') ? 'active' : ''}>
                 People
               </Link>
