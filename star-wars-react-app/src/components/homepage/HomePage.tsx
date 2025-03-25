@@ -1,19 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom'
 import '../../styles/HomePage.css';
 
-const HomePage: React.FC = () => {
+interface ButtonProps {
+  primary?: boolean;
+  children: React.ReactNode;
+  href: string;
+}
+
+const Button: React.FC<ButtonProps> = ({ primary = false, children, href }) => {
+  return (
+    <a 
+      href={href} 
+      className={`btn ${primary ? 'btn-primary' : 'btn-outline'}`}
+    >
+      {children}
+    </a>
+  );
+};
+
+const StarWarsHomepage: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
-  const [showIntro, setShowIntro] = useState(true);
-
-  useEffect(() => {
-    // Hide the intro crawl after it completes
-    const timer = setTimeout(() => {
-      setShowIntro(false);
-    }, 12000);
-
-    return () => clearTimeout(timer);
-  }, []);
 
   const categories = [
     { 
@@ -54,31 +61,27 @@ const HomePage: React.FC = () => {
     }
   ];
 
+
   return (
-    <div className="homepage">
-      {showIntro ? (
-        <div className="intro-crawl-container">
-          <div className="intro-crawl">
-            <div className="title">
-              <h1>STAR WARS DATA</h1>
-              <h2>A GALAXY OF INFORMATION</h2>
-            </div>
-            <p>Welcome to the ultimate Star Wars database! Here you'll find detailed information about the characters, films, planets, species, starships, and vehicles from the entire Star Wars saga.</p>
-            <p>Explore the data from a galaxy far, far away...</p>
+    <div className="starwars-container">
+      <div className="banner">
+        <div className="banner-overlay"></div>
+        <div className="banner-content">
+          <h1 className="title">EXPLORE THE GALAXY</h1>
+          <p className="subtitle">
+            Discover the characters, vehicles, planets, and starships from the Star Wars universe
+          </p>
+          <div className="button-container">
+            <Button primary href="#">START EXPLORING</Button>
+            <Button href="#">WATCH TRAILERS</Button>
           </div>
         </div>
-      ) : (
-        <>
-          <div className="hero-section">
-            <div className="stars"></div>
-            <div className="twinkling"></div>
-            <div className="hero-content">
-              <h1 className="hero-title">Star Wars Universe</h1>
-              <p className="hero-subtitle">Explore the galaxy far, far away...</p>
-            </div>
-          </div>
+        <div className="image-credit">
+          Photo by <a href="https://unsplash.com/@sushioutlaw?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash" target="_blank" rel="noopener noreferrer">Brian McGowan</a> on <a href="https://unsplash.com/photos/white-robot-toy-on-black-background-ggg_B1MeqQk?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash" target="_blank" rel="noopener noreferrer">Unsplash</a>
+        </div>
+      </div>
 
-          <div className="categories-section">
+      <div className="categories-section">
             <h2 className="section-title">Choose Your Path</h2>
             <div className="categories-grid">
               {categories.map((category) => (
@@ -98,16 +101,10 @@ const HomePage: React.FC = () => {
               ))}
             </div>
           </div>
-
-          <div className="quote-section">
-            <blockquote>
-              "May the Force be with you."
-            </blockquote>
-          </div>
-        </>
-      )}
     </div>
+
+    
   );
 };
 
-export default HomePage;
+export default StarWarsHomepage;
