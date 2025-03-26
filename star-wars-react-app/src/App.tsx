@@ -7,6 +7,7 @@ import StarshipsPage from './routes/starships';
 import SpeciesPage from './routes/species';
 import PlanetsPage from './routes/planets';
 import FilmsPage from './routes/films';
+import ContactPage from './routes/contact'
 import './styles/global.css';
 import './App.css';
 import './index.css';
@@ -24,6 +25,7 @@ function App() {
           <Route path="species" element={<SpeciesPage />} />
           <Route path="planets" element={<PlanetsPage />} />
           <Route path="films" element={<FilmsPage />} />
+          <Route path="contact" element={<ContactPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
