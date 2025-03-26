@@ -4,6 +4,8 @@ import { fetchStarships } from '../../services/api';
 import { Starship } from '../../interfaces';
 import SectionTitle from '../../components/common/SectionTitle';
 import StarshipList from '../../components/starships/StarshipList';
+import LoadingSpinner from '../../components/common/LoadingSpinner';
+import ErrorMessage from '../../components/common/ErrorMessage';
 
 const StarshipsPage: React.FC = () => {
   const {
@@ -26,6 +28,12 @@ const StarshipsPage: React.FC = () => {
         searchTerm={searchTerm}
         placeholder='Search Starships...'
       />
+
+      {isLoading ? (
+        <LoadingSpinner /> 
+      ) : error ? (
+        <ErrorMessage message={error} />
+      ) : (
       
       <StarshipList
         starships={starships}
@@ -38,6 +46,7 @@ const StarshipsPage: React.FC = () => {
         onNextPage={loadNextPage}
         onPrevPage={loadPrevPage}
       />
+      )}
     </div>
   );
 };

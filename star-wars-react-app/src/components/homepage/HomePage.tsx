@@ -7,13 +7,14 @@ interface ButtonProps {
   primary?: boolean;
   children: React.ReactNode;
   href: string;
+  target?:string;
 }
 
-const Button: React.FC<ButtonProps> = ({ primary = false, children, href }) => {
+const Button: React.FC<ButtonProps> = ({ primary = false, children, href, target }) => {
   return (
     <a 
       href={href} 
-      className={`btn ${primary ? 'btn-primary' : 'btn-outline'}`}
+      className={`btn ${primary ? 'btn-primary' : 'btn-outline'}`} target={target}
     >
       {children}
     </a>
@@ -73,8 +74,8 @@ const StarWarsHomepage: React.FC = () => {
             Discover the characters, vehicles, planets, and starships from the Star Wars universe
           </p>
           <div className="button-container">
-            <Button primary href="#">START EXPLORING</Button>
-            <Button href="#">WATCH TRAILERS</Button>
+            <Button primary href="#categories">START EXPLORING</Button>
+            <Button href="https://www.starwars.com/" target="_blank">WATCH TRAILERS</Button>
           </div>
         </div>
         <Credit 
@@ -86,7 +87,7 @@ const StarWarsHomepage: React.FC = () => {
         />
       </div>
 
-      <div className="categories-section">
+      <div id="categories" className="categories-section">
             <h2 className="section-title">Choose Your Path</h2>
             <div className="categories-grid">
               {categories.map((category) => (

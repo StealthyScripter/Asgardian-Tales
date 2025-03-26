@@ -4,6 +4,8 @@ import { fetchFilms } from '../../services/api';
 import { Film } from '../../interfaces';
 import SectionTitle from '../../components/common/SectionTitle';
 import FilmList from '../../components/films/FilmList';
+import LoadingSpinner from '../../components/common/LoadingSpinner';
+import ErrorMessage from '../../components/common/ErrorMessage';
 
 const FilmsPage: React.FC = () => {
   const {
@@ -22,7 +24,12 @@ const FilmsPage: React.FC = () => {
         searchTerm={searchTerm}
         placeholder='Search Films...'
       />
-      
+
+      {isLoading ? (
+        <LoadingSpinner />
+      ) : error ? (
+        <ErrorMessage message={error} />
+      ) : (
       <FilmList
         films={films}
         isLoading={isLoading}
@@ -30,6 +37,7 @@ const FilmsPage: React.FC = () => {
         onSearch={handleSearch}
         searchTerm={searchTerm}
       />
+    )}
     </div>
   );
 };

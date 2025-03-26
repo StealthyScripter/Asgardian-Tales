@@ -4,6 +4,8 @@ import useStarWarsData from '../../hooks/useStarWarsData';
 import { fetchCharacters } from '../../services/api';
 import { Character } from '../../interfaces';
 import SectionTitle from '../../components/common/SectionTitle';
+import LoadingSpinner from '../../components/common/LoadingSpinner';
+import ErrorMessage from '../../components/common/ErrorMessage';
 
 const CharactersPage: React.FC = () => {
   const {
@@ -26,7 +28,12 @@ const CharactersPage: React.FC = () => {
         searchTerm={searchTerm}
         placeholder='Search Characters...'
       />
-      
+
+      {isLoading ?(
+        <LoadingSpinner />
+      ) : error ? (
+        <ErrorMessage message={error}/>
+      ) :(
       
       <CharacterList
         characters={characters}
@@ -39,6 +46,7 @@ const CharactersPage: React.FC = () => {
         onNextPage={loadNextPage}
         onPrevPage={loadPrevPage}
       />
+      )}
     </div>
   );
 };

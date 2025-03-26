@@ -1,11 +1,17 @@
+import '../../styles/CommonComponents.css'
+
 interface ErrorMessageProps {
-    message: string;
-  }
-  
-  export default function ErrorMessage({ message }: ErrorMessageProps) {
-    return (
-      <div className="bg-red-900 text-white p-4 rounded-md text-center">
-        <p>{message}</p>
-      </div>
-    );
-  }
+  message: string;
+  onClose?: () => void;  // Optional handler to close the error message
+}
+
+export default function ErrorMessage({ message, onClose }: ErrorMessageProps) {
+  return (
+    <div className="error-message">
+      <p>{message}</p>
+      {onClose && (
+        <button onClick={onClose}>✕</button>
+      )}
+    </div>
+  );
+}

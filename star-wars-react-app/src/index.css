@@ -59,11 +59,19 @@
 
 /* Character card styles */
 .character-card {
-  background-color: var(--card-background);
+  background-color: transparent;
   border-radius: 8px;
   overflow: hidden;
   border: 1px solid var(--border-color);
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
   padding: 1.5rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transform-style: preserve-3d;
+}
+
+.character-card:hover {
+  transform: rotateY(15deg) rotateX(5deg); 
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
 .character-card h2 {
@@ -223,7 +231,7 @@
 .starship-card,
 .vehicle-card,
 .film-card {
-  background-color: var(--card-background);
+  background-color: transparent;
   border-radius: 8px;
   overflow: hidden;
   border: 1px solid var(--border-color);
@@ -231,6 +239,15 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+}
+
+.character-card:hover,.planet-card:hover,
+.species-card:hover,
+.starship-card:hover,
+.vehicle-card:hover,
+.film-card:hover {
+  transform: rotateY(15deg) rotateX(5deg); 
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
 .planet-card h2,

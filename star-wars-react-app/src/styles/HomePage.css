@@ -5,7 +5,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-image: url('../../public/brian-mcgowan-ggg_B1MeqQk-unsplash.jpg');
+  background-image: url('/brian-mcgowan-ggg_B1MeqQk-unsplash.jpg');
   background-size: cover;
   background-position: center;
   padding: 0 2rem;
@@ -65,10 +65,11 @@
 }
 
 .btn-primary:hover {
+  color:#ffe81f;
   transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(255, 232, 31, 0.3);
-  color:#000;
-  background-color: #fff;
+  background-color:transparent;
+  border: 2px solid #ffe81f;
+  
 }
 
 .btn-outline {

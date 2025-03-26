@@ -4,6 +4,8 @@ import { fetchVehicles } from '../../services/api';
 import { Vehicle } from '../../interfaces';
 import SectionTitle from '../../components/common/SectionTitle';
 import VehicleList from '../../components/vehicles/VehicleList';
+import LoadingSpinner from '../../components/common/LoadingSpinner';
+import ErrorMessage from '../../components/common/ErrorMessage';
 
 const VehiclesPage: React.FC = () => {
   const {
@@ -26,6 +28,12 @@ const VehiclesPage: React.FC = () => {
         searchTerm={searchTerm}
         placeholder='Search Vehicles...'
       />
+
+      {isLoading ? (
+        <LoadingSpinner />
+      ) : error ? (
+        <ErrorMessage message={error} />
+      ) : (
       
       <VehicleList
         vehicles={vehicles}
@@ -38,6 +46,7 @@ const VehiclesPage: React.FC = () => {
         onNextPage={loadNextPage}
         onPrevPage={loadPrevPage}
       />
+      )}
     </div>
   );
 };

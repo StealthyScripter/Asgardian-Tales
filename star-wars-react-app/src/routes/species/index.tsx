@@ -4,6 +4,8 @@ import { fetchSpecies } from '../../services/api';
 import { Species } from '../../interfaces';
 import SectionTitle from '../../components/common/SectionTitle';
 import SpeciesList from '../../components/species/SpeciesList';
+import LoadingSpinner from '../../components/common/LoadingSpinner';
+import ErrorMessage from '../../components/common/ErrorMessage';
 
 const SpeciesPage: React.FC = () => {
   const {
@@ -26,6 +28,12 @@ const SpeciesPage: React.FC = () => {
         searchTerm={searchTerm}
         placeholder='Search Species...'
       />
+
+      {isLoading ? (
+        <LoadingSpinner />
+      ) : error ? (
+        <ErrorMessage message={error } />
+      ) : (
       
       <SpeciesList
         speciesList={speciesList}
@@ -38,6 +46,7 @@ const SpeciesPage: React.FC = () => {
         onNextPage={loadNextPage}
         onPrevPage={loadPrevPage}
       />
+     )}
     </div>
   );
 };

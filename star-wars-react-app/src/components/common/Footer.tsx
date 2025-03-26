@@ -7,9 +7,9 @@ interface FooterLinkProps {
   target?: string;
 }
 
-const FooterLink: React.FC<FooterLinkProps> = ({ href, children }) => {
+const FooterLink: React.FC<FooterLinkProps> = ({ href, children, target }) => {
   return (
-    <a href={href} className="footer-link">
+    <a href={href} className="footer-link" target={target}>
       {children}
     </a>
   );
@@ -28,10 +28,10 @@ const Footer: React.FC = () => {
         </div>
         
         <div className="footer-links">
-          <FooterLink href="https://en.wikipedia.org/wiki/Star_Wars">About</FooterLink>
+          <FooterLink href="https://en.wikipedia.org/wiki/Star_Wars" target="_blank">About Starwars</FooterLink>
           <FooterLink href="/contact">Contact</FooterLink>
-          <FooterLink href="https://www.starwars.com/">Star Wars Official</FooterLink>
-          <FooterLink href="https://www.disneyplus.com/brand/star-wars?cid=DTCI-Site-StarWars-Site-Engagement-DisneyPlus-US-StarWars-StarWars-EN-NavPipe-SW_Generic-NA">Starwars on Disney</FooterLink>
+          <FooterLink href="https://www.starwars.com/" target="_blank">Star Wars Official</FooterLink>
+          <FooterLink href="https://www.disneyplus.com/brand/star-wars?cid=DTCI-Site-StarWars-Site-Engagement-DisneyPlus-US-StarWars-StarWars-EN-NavPipe-SW_Generic-NA" target="_blank">Starwars on Disney</FooterLink>
           
         </div>
         

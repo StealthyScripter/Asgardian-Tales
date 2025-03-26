@@ -106,15 +106,32 @@ const CharacterCard: React.FC<CharacterCardProps> = ({ character }) => {
       </button>
 
       {showDetails && (
-        <div className="character-details">
-          {/* Additional character details can go here */}
+  <div className="character-details">
+    <div className="section">
+      <h3>Homeworld</h3>
+      <p>{character.homeworld}</p>
+    </div>
+    
+        {speciesDetails.length > 0 && (
           <div className="section">
-            <h3>Homeworld</h3>
-            <p>{character.homeworld}</p>
+            <h3>Species Information</h3>
+            {speciesDetails.map((species, index) => (
+              <div key={index} className="species-details">
+                <p><strong>Name:</strong> {species.name}</p>
+                <p><strong>Classification:</strong> {species.classification}</p>
+                <p><strong>Language:</strong> {species.language}</p>
+                <p><strong>Average Lifespan:</strong> {species.average_lifespan}</p>
+                {species.average_height !== 'unknown' && (
+                  <p><strong>Average Height:</strong> {species.average_height}cm</p>
+                )}
+              </div>
+            ))}
           </div>
-          {/* More sections as needed */}
-        </div>
-      )}
+        )}
+        
+        {/* More sections as needed */}
+      </div>
+        )}
     </div>
   );
 };

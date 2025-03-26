@@ -4,6 +4,8 @@ import { fetchPlanets } from '../../services/api';
 import { Planet } from '../../interfaces';
 import SectionTitle from '../../components/common/SectionTitle';
 import PlanetList from '../../components/planets/PlanetList';
+import LoadingSpinner from '../../components/common/LoadingSpinner';
+import ErrorMessage from '../../components/common/ErrorMessage';
 
 const PlanetsPage: React.FC = () => {
   const {
@@ -27,6 +29,12 @@ const PlanetsPage: React.FC = () => {
         placeholder='Search Planets...'
       />
       
+      {isLoading ? (
+        <LoadingSpinner />
+      ) : error ? (
+        <ErrorMessage message={error} />
+      ) : (
+
       <PlanetList
         planets={planets}
         isLoading={isLoading}
@@ -38,6 +46,7 @@ const PlanetsPage: React.FC = () => {
         onNextPage={loadNextPage}
         onPrevPage={loadPrevPage}
       />
+    )}
     </div>
   );
 };
