@@ -23,10 +23,11 @@ import { useState } from 'react';
 
   return (
     <header className="header">
-      <div className="container">
-        <Link to="/" className="logo">
+      <Link to="/" className="logo">
           <h1>Star Wars</h1>
         </Link>
+      <div className="container">
+        
         
         {/* Hamburger menu icon for mobile */}
         <div className="hamburger-menu" onClick={toggleMenu}>

@@ -1,17 +1,26 @@
 /* Header styles */
 .container {
-    max-width: 1200px;
     margin: 0 auto;
-    padding: 0 20px;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
   }
   
   /* Header styles */
   .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
     background-color: var(--header-background);
     padding: 1rem 0;
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);display:flex;
+    align-items: baseline;
+    position:relative;
   }
-  
+
   .header .container {
     display: flex;
     justify-content: space-between;
@@ -62,9 +71,12 @@
   
   /* Hamburger menu - hidden by default on desktop */
   .hamburger-menu {
-    display: none;
+    display: none; /* Hide by default on desktop */
+    position: absolute;
+    right: 20px; /* Padding from right edge */
+    top: 20px; /* Adjust as needed for vertical alignment */
     cursor: pointer;
-    z-index: 20;
+    z-index: 15;
   }
   
   .hamburger-icon {
@@ -115,31 +127,50 @@
   }
   
   /* Media queries for responsive design */
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 1200px) {
+    .container {
+        margin:0 0 0 auto; 
+    }
+    .header {
+        display: flex;
+        align-items: center; /* Changed from baseline for better alignment */
+        justify-content: space-between;
+        margin: 0;
+        padding: 10 20px; /* Add horizontal padding */
+      }
+      
+      /* Show hamburger menu on mobile */
+      .hamburger-menu {
+        display: block;
+        position: relative;
+        right: 0;
+        top: 0;
+        padding-right: 1.5rem;
+      }
+
     .logo h1 {
       font-size: 2rem;
-    }
-    
-    /* Show hamburger menu on mobile */
-    .hamburger-menu {
-      display: block;
+      padding-left: 1.5rem;
     }
     
     /* Hide navigation by default on mobile */
     nav {
-      position: absolute;
-      top: 100%;
-      right: -100%;
-      width: 80%;
-      max-width: 300px;
-      background-color: var(--header-background);
-      padding: 1rem;
-      border-radius: 0 0 0 10px;
-      border-left: 1px solid var(--border-color);
-      border-bottom: 1px solid var(--border-color);
-      transition: right 0.3s ease;
-      z-index: 10;
-      box-shadow: -2px 2px 10px rgba(0, 0, 0, 0.2);
+        position: fixed; /* Change to fixed for better overlay behavior */
+        top: 60px; /* Adjust based on your header height */
+        right: -100%;
+        width: 80%;
+        max-width: 300px;
+        background-color: var(--header-background);
+        padding: 1rem;
+        border-radius: 0 0 0 10px;
+        border-left: 1px solid var(--border-color);
+        border-bottom: 1px solid var(--border-color);
+        transition: right 0.3s ease;
+        z-index: 10;
+        box-shadow: -2px 2px 10px rgba(0, 0, 0, 0.2);
+        height: auto; /* Let it adjust to content */
+        max-height: 80vh; /* Prevent it from being too tall */
+        overflow-y: auto; /* Allow scrolling if needed */
     }
     
     /* Show navigation when menu is open */

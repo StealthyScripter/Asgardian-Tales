@@ -27,6 +27,12 @@ const CharacterList: React.FC<CharacterListProps> = ({
   onNextPage,
   onPrevPage,
 }) => {
+   // Handle search input changes
+const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  onSearch(e.target.value);
+  };
+
+
   if (isLoading && characters.length === 0) {
     return <LoadingSpinner />;
   }
@@ -37,6 +43,17 @@ const CharacterList: React.FC<CharacterListProps> = ({
 
   return (
     <div className="character-list-container">
+      {/* Search bar */}
+      <div className="search-container">
+        <input
+          type="text"
+          placeholder="Search characters..."
+          value={searchTerm}
+          onChange={handleSearchChange}
+          className="search-input"
+        />
+      </div>
+
       {characters.length === 0 ? (
         <div className="no-results">
           <p>No characters found. Try a different search term.</p>
