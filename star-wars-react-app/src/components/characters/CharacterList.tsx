@@ -20,17 +20,11 @@ const CharacterList: React.FC<CharacterListProps> = ({
   characters,
   isLoading,
   error,
-  onSearch,
-  searchTerm,
   hasNextPage,
   hasPrevPage,
   onNextPage,
   onPrevPage,
 }) => {
-   // Handle search input changes
-const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  onSearch(e.target.value);
-  };
 
 
   if (isLoading && characters.length === 0) {
@@ -44,7 +38,7 @@ const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   return (
     <div className="character-list-container">
       {/* Search bar */}
-      <div className="search-container">
+      {/* <div className="search-container">
         <input
           type="text"
           placeholder="Search characters..."
@@ -52,7 +46,7 @@ const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
           onChange={handleSearchChange}
           className="search-input"
         />
-      </div>
+      </div> */}
 
       {characters.length === 0 ? (
         <div className="no-results">

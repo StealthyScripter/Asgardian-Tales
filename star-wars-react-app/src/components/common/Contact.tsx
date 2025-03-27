@@ -196,18 +196,22 @@ const Contact: React.FC = () => {
       <div className="additional-contact">
       
         <div className="contact-methods">
-          <div className="contact-method">
-          <a href="https://github.com/yourusername" target="_blank">Github</a>
-          </div>
-          <div className="contact-method">
-            <a href="https://www.linkedin.com/in/brian-koringo/">LinkedIn</a>
-          </div>
-          <div className="contact-method">
-          <a href="mailto:your.email@example.com" target="_blank">Email</a>
-          </div>
-          <div className="contact-method">
-          <a href="brianwendot.com" target="_blank">Website</a>
-          </div>
+          
+          <a href="https://github.com/StealthyScripter" target="_blank">
+            <div className="contact-method">Github</div>
+          </a>
+
+          <a href="https://www.linkedin.com/in/brian-koringo/" target="_blank">
+            <div className="contact-method">LinkedIn</div>
+          </a>
+
+          <a href="mailto:koringo.w.brian@gmail.com" target="_blank">
+            <div className="contact-method">Email</div>
+          </a>
+          
+          <a href="https://brianwendot.com/" target="_blank">
+            <div className="contact-method">Website</div>
+          </a>
           
         </div>
       </div>
