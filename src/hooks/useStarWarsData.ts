@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { ApiResponse } from '../interfaces';
-import * as api from '../services/api';
 
 interface UseStarWarsDataOptions {
   initialSearchTerm?: string;
